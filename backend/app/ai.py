@@ -156,63 +156,171 @@ Return valid JSON only.
 No Markdown fences.
 """
 
-{
-  "concepts": [
-    {
-      "concept": "Hash Table",
-      
-      "source_explanation": "...",
+SCHEMA_HINT = {
+    "title": "string",
 
-      "prerequisites": [
+    "summary": {
+        "en": "string",
+        "zh": "string"
+    },
+
+    "key_points": [
         {
-          "concept": "Array lookup",
-          "reason_needed": "..."
+            "concept": "string",
+            "explanation_en": "string",
+            "explanation_zh": "string",
+            "importance": "high|medium|low",
+            "source_page": 1
         }
-      ],
+    ],
 
-      "expert_blind_spots": [
+    "concepts": [
         {
-          "implicit_assumption": "The student understands why lookup speed matters.",
-          "hidden_step": "Repeated searching is what makes brute force O(n²).",
-          "why_student_might_struggle": "Big-O may still be an abstract idea."
+            "concept": "string",
+
+            "source_explanation": {
+                "en": "string",
+                "zh": "string"
+            },
+
+            "prerequisites": [
+                {
+                    "concept": "string",
+                    "reason_needed_en": "string",
+                    "reason_needed_zh": "string"
+                }
+            ],
+
+            "expert_blind_spots": [
+                {
+                    "implicit_assumption_en": "string",
+                    "implicit_assumption_zh": "string",
+
+                    "hidden_step_en": "string",
+                    "hidden_step_zh": "string",
+
+                    "why_student_might_struggle_en": "string",
+                    "why_student_might_struggle_zh": "string"
+                }
+            ],
+
+            "intuition": {
+                "en": "string",
+                "zh": "string"
+            },
+
+            "step_by_step": [
+                {
+                    "step": 1,
+                    "explanation_en": "string",
+                    "explanation_zh": "string"
+                }
+            ],
+
+            "formal_explanation": {
+                "en": "string",
+                "zh": "string"
+            },
+
+            "misconceptions": [
+                {
+                    "misconception_en": "string",
+                    "misconception_zh": "string",
+
+                    "why_it_feels_reasonable_en": "string",
+                    "why_it_feels_reasonable_zh": "string",
+
+                    "correction_en": "string",
+                    "correction_zh": "string"
+                }
+            ],
+
+            "diagnostic_question": {
+                "question_en": "string",
+                "question_zh": "string",
+
+                "expected_reasoning_en": "string",
+                "expected_reasoning_zh": "string",
+
+                "diagnosis_if_wrong": {
+                    "prerequisite_gap": "string",
+                    "conceptual_misunderstanding": "string",
+                    "application_difficulty": "string",
+                    "memorization_without_understanding": "string"
+                }
+            },
+
+            "source_page": 1
         }
-      ],
+    ],
 
-      "intuition": {
-        "en": "...",
-        "zh": "..."
-      },
-
-      "step_by_step": [
-        "...",
-        "...",
-        "..."
-      ],
-
-      "formal_explanation": {
-        "en": "...",
-        "zh": "..."
-      },
-
-      "misconceptions": [
+    "five_whys": [
         {
-          "misconception": "...",
-          "why_it_feels_reasonable": "...",
-          "correction": "..."
-        }
-      ],
+            "question_en": "string",
+            "answer_en": "string",
 
-      "diagnostic_question": {
-        "question": "...",
-        "expected_reasoning": "...",
-        "diagnosis_if_wrong": {
-          "A": "prerequisite gap",
-          "B": "conceptual misunderstanding",
-          "C": "application difficulty"
+            "question_zh": "string",
+            "answer_zh": "string",
+
+            "source_page": 1
         }
-      }
-    }
-  ]
+    ],
+
+    "cornell": {
+        "rows": [
+            {
+                "cue_en": "string",
+                "cue_zh": "string",
+
+                "notes_en": "string",
+                "notes_zh": "string",
+
+                "source_page": 1
+            }
+        ],
+
+        "summary_en": "string",
+        "summary_zh": "string"
+    },
+
+    "examples": [
+        {
+            "title": "string",
+
+            "explanation_en": "string",
+            "explanation_zh": "string",
+
+            "code": "optional string",
+
+            "source_page": 1
+        }
+    ],
+
+    "common_mistakes": [
+        {
+            "mistake_en": "string",
+            "mistake_zh": "string",
+
+            "why_it_happens_en": "string",
+            "why_it_happens_zh": "string",
+
+            "fix_en": "string",
+            "fix_zh": "string",
+
+            "source_page": 1
+        }
+    ],
+
+    "flashcards": [
+        {
+            "front": "string",
+            "back": "string",
+
+            "card_type": "definition|why|compare|code|application|hidden_step|misconception",
+
+            "source_page": 1
+        }
+    ]
 }
 def _clean_json(text: str) -> dict[str, Any]:
     text = text.strip()

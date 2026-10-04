@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / 'backend'))
 _tmp = tempfile.TemporaryDirectory()
 os.environ['DATABASE_URL'] = f'sqlite:///{_tmp.name}/test.db'
 os.environ['UPLOAD_DIR'] = f'{_tmp.name}/uploads'
-os.environ['OPENAI_API_KEY'] = ''
+os.environ['OPENROUTER_API_KEY'] = ''
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 from app.main import app
@@ -78,7 +78,7 @@ def test_no_key_is_explicit_and_does_not_create_fake_lessons(client, document):
     assert client.get(f'/documents/{document}/lab').status_code == 404
 
 def test_generated_lesson_persists_and_is_reused(client, document, generated, monkeypatch):
-    monkeypatch.setattr(get_settings(), 'openai_api_key', 'test-only')
+    monkeypatch.setattr(get_settings(), 'openrouter_api_key', 'test-only')
     calls=[]
     def generate(title,text):
         calls.append(title)
@@ -89,13 +89,13 @@ def test_generated_lesson_persists_and_is_reused(client, document, generated, mo
     assert first.json()['truncated'] is True
     assert client.get(f'/documents/{document}/lab').json() == first.json()
     assert client.post(f'/documents/{document}/lab').json() == first.json()
-    monkeypatch.setattr(get_settings(), 'openai_api_key', '')
+    monkeypatch.setattr(get_settings(), 'openrouter_api_key', '')
     assert client.post(f'/documents/{document}/lab').json() == first.json()
     assert len(calls) == 1
     assert any(l['document_id'] == document for l in client.get('/labs').json())
 
 def test_failure_does_not_persist_or_leak_secrets(client,document,monkeypatch):
-    monkeypatch.setattr(get_settings(),'openai_api_key','test-only')
+    monkeypatch.setattr(get_settings(),'openrouter_api_key','test-only')
     def fail(*args): raise ValueError('sensitive provider message')
     monkeypatch.setattr(lab_routes,'generate_concepts',fail)
     response = client.post(f'/documents/{document}/lab')
@@ -103,3 +103,24 @@ def test_failure_does_not_persist_or_leak_secrets(client,document,monkeypatch):
     assert 'sensitive' not in response.text
     assert client.get(f'/documents/{document}/lab').status_code == 404
     assert client.get(f'/documents/{document}').json()['status'] == 'extracted'
+
+@pytest.mark.parametrize('status',[429,503])
+def test_provider_status_reaches_lab_and_notes_routes(client,document,monkeypatch,status):
+    from app.llm import GenerationError
+    from app import main
+    monkeypatch.setattr(get_settings(),'openrouter_api_key','test-only')
+    def unavailable(*args): raise GenerationError('Free model temporarily unavailable',status)
+    monkeypatch.setattr(lab_routes,'generate_concepts',unavailable)
+    monkeypatch.setattr(main,'generate_study_notes',unavailable)
+    assert client.post(f'/documents/{document}/lab').status_code == status
+    response=client.post(f'/documents/{document}/generate',json={'bilingual':True})
+    assert response.status_code == status
+    assert client.get(f'/documents/{document}/note').status_code == 404
+
+
+def test_health_reports_openrouter_model_without_key(client):
+    health=client.get('/health').json()
+    assert health['provider']=='openrouter'
+    assert health['model']=='nvidia/nemotron-3-ultra-550b-a55b:free'
+    assert health['ai_enabled'] is False
+    assert 'api_key' not in health

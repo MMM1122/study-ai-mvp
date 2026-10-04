@@ -7,6 +7,7 @@ from .db import get_db
 from .models import ConceptLab, Document
 from .lab import generate_concepts
 from .config import get_settings
+from .llm import GenerationError
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -42,10 +43,12 @@ def create_lab(document_id: int, db: Session = Depends(get_db)):
     lab = db.scalar(select(ConceptLab).where(ConceptLab.document_id == document_id))
     if lab:
         return present(lab, doc)
-    if not get_settings().openai_api_key:
-        raise HTTPException(503, "Configure OPENAI_API_KEY on the backend to generate lessons. Curated labs remain available.")
+    if not get_settings().openrouter_api_key:
+        raise HTTPException(503, "Configure OPENROUTER_API_KEY on the backend to generate lessons. Curated labs remain available.")
     try:
         content, truncated = generate_concepts(doc.title, doc.extracted_text)
+    except GenerationError as exc:
+        raise HTTPException(exc.status_code, str(exc)) from None
     except Exception as exc:
         logger.warning("Concept generation failed: %s", type(exc).__name__)
         raise HTTPException(502, "Lesson generation or source validation failed. Please retry; existing notes are unchanged.") from None

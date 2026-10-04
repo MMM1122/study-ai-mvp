@@ -27,13 +27,14 @@ motion. Perception framing changes only the caption, not dot paths or speed.
 ## AI generation
 
 The original extraction/upload pipeline supplies course text. The backend sends only
-the configured `MAX_AI_CHARS` prefix and persists a visible truncation flag. Structured
-Responses output creates 1–4 pipeline lessons with 2–4 cross-domain bridges each.
+the configured `MAX_AI_CHARS` prefix and persists a visible truncation flag. Prompted JSON, locally validated and repaired at most once, creates 1–4 pipeline lessons with 2–4 cross-domain bridges each.
 Every bridge includes a mapping and boundary. Every lesson includes a challenge and
 exact source quotes. A page reference is accepted only when that quote occurs within
 that page's extraction marker. No generated external URLs are accepted.
 
-Generation failures return a generic 502 without provider secrets or partial writes.
+Invalid output returns 502 without provider secrets or partial writes. Free-model rate limits
+return 429; provider availability/authentication failures return 503. Transport failures
+are not automatically retried. Malformed content receives at most one repair request.
 No API key returns 503. Successful lessons persist separately from notes. Repeated
 POSTs return saved lessons rather than silently spending on regeneration. Concurrent
 requests are protected against duplicate rows by the unique document key, though
@@ -65,4 +66,4 @@ curated lessons are labeled examples, not purported extractions of those lecture
 Selected background references used in the curated collection:
 - https://plato.stanford.edu/entries/wang-yangming/
 - https://openstax.org/books/biology-2e/pages/33-3-homeostasis
-- https://developers.openai.com/api/docs/guides/structured-outputs
+- https://openrouter.ai/nvidia/nemotron-3-ultra-550b-a55b:free

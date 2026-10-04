@@ -44,8 +44,8 @@ Required environment variables:
 
 ```env
 DATABASE_URL=postgresql+psycopg://...
-OPENAI_API_KEY=...
-OPENAI_MODEL=gpt-5.6-luna
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
 CORS_ORIGINS=https://YOUR-FRONTEND-DOMAIN.vercel.app
 UPLOAD_DIR=/app/data/uploads
 ```

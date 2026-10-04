@@ -20,7 +20,7 @@ A bilingual AI study workspace for course materials. Organize subjects and folde
 - Review queue with Again / Hard / Good / Easy scheduling
 - Responsive Next.js interface
 - PostgreSQL in Docker; SQLite fallback for backend-only local testing
-- Demo mode when no OpenAI API key is configured
+- Demo mode when no OpenRouter API key is configured
 
 ## Architecture
 
@@ -30,7 +30,7 @@ Next.js 16 / React 19
         v
 FastAPI / SQLAlchemy
         |
-        +---- OpenAI Responses API
+        +---- OpenRouter Chat Completions
         |
         +---- PostgreSQL
         |
@@ -179,16 +179,16 @@ remain available through their existing routes.
 - Deterministic memory addressing, binary tape transitions, feedback response and
   frequency experiments, plus pipeline and explanation-level walkthroughs.
 - Search, discipline/pattern filters, English/Chinese interface and browser-local progress.
-- A document page can generate 1–4 grounded lessons through the existing OpenAI backend.
+- A document page can generate 1–4 grounded lessons through the OpenRouter backend.
   `POST /documents/{id}/lab` creates or returns a saved lesson; `GET` reads it;
   `GET /labs` lists saved lessons. Existing notes and review cards are not modified.
 
 Curated lessons work without the backend or an API key. Document generation requires
-`OPENAI_API_KEY` and a model supporting Responses structured output. Configure
-`OPENAI_MODEL` for your account. Missing credentials return an explicit 503, not a
+`OPENROUTER_API_KEY`. The default model is
+`nvidia/nemotron-3-ultra-550b-a55b:free` on OpenRouter. Missing credentials return an explicit 503, not a
 fabricated lesson. Generated lessons use the general pipeline renderer; specialized
-numerical simulations are curated only. Model output is validated with a bounded
-Pydantic schema and source quotes/pages are checked against the supplied text.
+numerical simulations are curated only. The model does not support enforced JSON Schema, so output is validated locally
+with a bounded Pydantic schema and at most one repair using the same model and source quotes/pages are checked against the supplied text.
 Quote matching does **not** verify explanatory accuracy or analogy quality.
 
 New table `concept_labs` is created on backend startup using the project's existing
@@ -215,3 +215,22 @@ an isolated production server on port 3100. On hosts where Turbopack cannot open
 internal build port, use `npm run build -- --webpack`.
 
 See [Concept Lab architecture](docs/concept-lab.md) for the extension contract.
+
+### OpenRouter configuration
+
+Set these in `backend/.env` for local development, or root `.env` for Docker:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key
+OPENROUTER_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
+```
+
+Both study notes and Concept Lab use `https://openrouter.ai/api/v1/chat/completions`.
+The OpenAI Python SDK is used only as an OpenRouter-compatible HTTP client. Old
+`OPENAI_API_KEY` settings are not used. There is no paid-model fallback. Free endpoints
+can be rate-limited or unavailable; the app displays an explicit retry message.
+Never put the key in a `NEXT_PUBLIC_` variable or commit `.env`.
+
+The free endpoint's published data policy says prompts may be logged and used to
+improve NVIDIA products. Do not submit confidential or personal data through it.
+See [model details and endpoint terms](https://openrouter.ai/nvidia/nemotron-3-ultra-550b-a55b:free).

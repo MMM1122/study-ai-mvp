@@ -7,7 +7,7 @@ sys.path.insert(0,str(root/'backend'))
 _tmp = tempfile.TemporaryDirectory()
 os.environ['DATABASE_URL']=f'sqlite:///{_tmp.name}/smoke.db'
 os.environ['UPLOAD_DIR']=f'{_tmp.name}/uploads'
-os.environ['OPENAI_API_KEY']=''
+os.environ['OPENROUTER_API_KEY']=''
 
 from fastapi.testclient import TestClient
 from app.main import app

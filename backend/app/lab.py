@@ -1,5 +1,6 @@
 """Generate grounded, cross-disciplinary lessons using a constrained renderer schema."""
 import re
+import json
 from .config import get_settings
 from .lab_schema import ConceptCollection
 
@@ -40,19 +41,16 @@ def validate_grounding(result: ConceptCollection, material: str) -> None:
 
 def generate_concepts(title: str, text: str) -> tuple[dict, bool]:
     settings = get_settings()
-    if not settings.openai_api_key:
-        raise RuntimeError("AI_DISABLED")
-    from openai import OpenAI
+    from .llm import generate_json
     material = text[:settings.max_ai_chars]
-    client = OpenAI(api_key=settings.openai_api_key, timeout=90, max_retries=1)
-    response = client.responses.parse(
-        model=settings.openai_model,
-        instructions=PROMPT,
-        input=f"Document title: {title}\nCOURSE MATERIAL:\n{material}",
-        text_format=ConceptCollection,
+    def validate(data):
+        result = ConceptCollection.model_validate(data)
+        validate_grounding(result, material)
+        return result.model_dump()
+    content = generate_json(
+        PROMPT,
+        "Required JSON schema:\n" + json.dumps(ConceptCollection.model_json_schema(), ensure_ascii=False)
+        + f"\nDocument title: {title}\nCOURSE MATERIAL:\n{material}",
+        validate,
     )
-    result = response.output_parsed
-    if result is None:
-        raise ValueError("The model did not return a lesson")
-    validate_grounding(result, material)
-    return result.model_dump(), len(text) > len(material)
+    return content, len(text) > len(material)

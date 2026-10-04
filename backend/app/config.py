@@ -1,13 +1,16 @@
 from functools import lru_cache
 from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     app_name: str = "StudyAI"
     database_url: str = "sqlite:///./studyai.db"
-    openai_api_key: str | None = None
-    openai_model: str = "gpt-5.6-luna"
+    openrouter_api_key: str | None = None
+    openrouter_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    ai_max_tokens: int = Field(default=16000, ge=1024, le=65536)
+    ai_timeout_seconds: int = Field(default=180, ge=10, le=600)
     cors_origins: str = "http://localhost:3000"
     upload_dir: str = "./data/uploads"
     max_ai_chars: int = 90000

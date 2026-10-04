@@ -19,8 +19,8 @@ services:
     build: ./backend
     environment:
       DATABASE_URL: postgresql+psycopg://studyai:studyai@db:5432/studyai
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.6-luna}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
       CORS_ORIGINS: http://localhost:3000
       UPLOAD_DIR: /app/data/uploads
     volumes:

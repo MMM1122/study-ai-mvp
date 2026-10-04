@@ -89,6 +89,8 @@ def test_generated_lesson_persists_and_is_reused(client, document, generated, mo
     assert first.json()['truncated'] is True
     assert client.get(f'/documents/{document}/lab').json() == first.json()
     assert client.post(f'/documents/{document}/lab').json() == first.json()
+    monkeypatch.setattr(get_settings(), 'openai_api_key', '')
+    assert client.post(f'/documents/{document}/lab').json() == first.json()
     assert len(calls) == 1
     assert any(l['document_id'] == document for l in client.get('/labs').json())
 

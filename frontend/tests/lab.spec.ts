@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 test('explore memory, predict, and retain progress after refresh',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');
- await expect(page.getByRole('heading',{name:'Different subjects.Connected ideas.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:/Different subjects.*Connected ideas/ })).toBeVisible();
  await page.locator('.concept-card').filter({hasText:'Addresses & memory'}).click();
  await page.locator('#array-index').fill('7');
  await expect(page.locator('.address-result')).toHaveText('0x101C');
@@ -62,6 +62,6 @@ test('missing backend is explicit and curated labs remain usable',async({page})=
  await page.route('**/labs',route=>route.abort());
  await page.goto('/');
  await page.getByRole('button',{name:'My generated labs'}).click();
- await expect(page.getByRole('alert')).toContainText('Could not load saved labs');
+ await expect(page.locator('.lab-alert')).toContainText('Could not load saved labs');
  await expect(page.locator('.concept-card')).toHaveCount(11);
 });

@@ -38,12 +38,12 @@ def create_lab(document_id: int, db: Session = Depends(get_db)):
         raise HTTPException(404, "Document not found")
     if not doc.extracted_text.strip():
         raise HTTPException(422, "No extractable text was found")
-    if not get_settings().openai_api_key:
-        raise HTTPException(503, "Configure OPENAI_API_KEY on the backend to generate lessons. Curated labs remain available.")
     # Reuse the saved lesson. Avoid silent paid regeneration and concurrent overwrite.
     lab = db.scalar(select(ConceptLab).where(ConceptLab.document_id == document_id))
     if lab:
         return present(lab, doc)
+    if not get_settings().openai_api_key:
+        raise HTTPException(503, "Configure OPENAI_API_KEY on the backend to generate lessons. Curated labs remain available.")
     try:
         content, truncated = generate_concepts(doc.title, doc.extracted_text)
     except Exception as exc:

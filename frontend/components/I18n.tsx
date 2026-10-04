@@ -26,8 +26,9 @@ const zh: Record<string,string> = {
 const I18nContext=createContext<Ctx>({lang:"en",setLang:()=>{},t:(x)=>x});
 export function I18nProvider({children}:{children:React.ReactNode}){
   const [lang,setLangState]=useState<UILang>("en");
-  useEffect(()=>{const saved=localStorage.getItem("studyai-ui-lang") as UILang|null;if(saved==="zh"||saved==="en")setLangState(saved)},[]);
-  function setLang(v:UILang){setLangState(v);localStorage.setItem("studyai-ui-lang",v)}
+  useEffect(()=>{let saved:UILang|null=null;try{saved=localStorage.getItem("studyai-ui-lang") as UILang|null}catch{}if(saved==="zh"||saved==="en")setLangState(saved)},[]);
+  function setLang(v:UILang){setLangState(v);try{localStorage.setItem("studyai-ui-lang",v)}catch{}}
+  useEffect(()=>{document.documentElement.lang=lang},[lang]);
   return <I18nContext.Provider value={{lang,setLang,t:(en)=>lang==="zh"?(zh[en]||en):en}}>{children}</I18nContext.Provider>
 }
 export function useI18n(){return useContext(I18nContext)}

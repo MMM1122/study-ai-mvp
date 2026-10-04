@@ -15,11 +15,13 @@ from .schemas import SubjectCreate, SubjectOut, SubjectDetail, FolderCreate, Fol
 from .extract import extract_document, SUPPORTED
 from .ai import generate_study_notes
 from .review import schedule
+from .lab_routes import router as lab_router
 
 settings = get_settings()
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title=settings.app_name, version="0.1.0")
+app = FastAPI(title=settings.app_name, version="0.2.0")
+app.include_router(lab_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.origins,

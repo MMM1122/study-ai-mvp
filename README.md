@@ -166,3 +166,52 @@ python scripts/smoke_test.py
 ```
 
 The repository was also checked for Python syntax and frontend TSX syntax. A full Next.js dependency build still requires `npm install` on a networked development machine.
+
+## Concept Lab (v0.2)
+
+The home page is now an interactive, bilingual Concept Lab. The original workspace is
+available under **Library** (`/library`); subjects, documents, notes and spaced review
+remain available through their existing routes.
+
+- 11 curated concept worlds across multiple disciplines, organized by representation,
+  systems, feedback, constraints and levels.
+- Understand / Play / Challenge modes, cross-domain examples and explicit analogy limits.
+- Deterministic memory addressing, binary tape transitions, feedback response and
+  frequency experiments, plus pipeline and explanation-level walkthroughs.
+- Search, discipline/pattern filters, English/Chinese interface and browser-local progress.
+- A document page can generate 1–4 grounded lessons through the existing OpenAI backend.
+  `POST /documents/{id}/lab` creates or returns a saved lesson; `GET` reads it;
+  `GET /labs` lists saved lessons. Existing notes and review cards are not modified.
+
+Curated lessons work without the backend or an API key. Document generation requires
+`OPENAI_API_KEY` and a model supporting Responses structured output. Configure
+`OPENAI_MODEL` for your account. Missing credentials return an explicit 503, not a
+fabricated lesson. Generated lessons use the general pipeline renderer; specialized
+numerical simulations are curated only. Model output is validated with a bounded
+Pydantic schema and source quotes/pages are checked against the supplied text.
+Quote matching does **not** verify explanatory accuracy or analogy quality.
+
+New table `concept_labs` is created on backend startup using the project's existing
+SQLAlchemy setup. Existing tables need no destructive migration. This remains a
+single-user MVP with the original authentication limitations; do not expose a paid
+AI endpoint as an unrestricted public service.
+
+### Verification
+
+```bash
+pip install -r backend/requirements-dev.txt
+pytest -q backend/tests
+python scripts/smoke_test.py
+cd frontend
+npm ci
+npm run lint
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+For a local installed browser, set `PLAYWRIGHT_EXECUTABLE_PATH`. End-to-end tests start
+an isolated production server on port 3100. On hosts where Turbopack cannot open its
+internal build port, use `npm run build -- --webpack`.
+
+See [Concept Lab architecture](docs/concept-lab.md) for the extension contract.

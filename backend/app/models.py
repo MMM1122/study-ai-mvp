@@ -83,3 +83,12 @@ class ReviewLog(Base):
     rating: Mapped[str] = mapped_column(String(16))
     reviewed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     flashcard: Mapped[Flashcard] = relationship(back_populates="reviews")
+
+
+class ConceptLab(Base):
+    __tablename__ = "concept_labs"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    document_id: Mapped[int] = mapped_column(ForeignKey("documents.id", ondelete="CASCADE"), unique=True, index=True)
+    content: Mapped[dict] = mapped_column(JSON)
+    truncated: Mapped[bool] = mapped_column(default=False)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

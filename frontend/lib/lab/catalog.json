@@ -1,0 +1,1446 @@
+[
+  {
+    "id": "representation",
+    "title": {
+      "en": "Perception & interpretation",
+      "zh": "知觉与解释"
+    },
+    "pattern": "representation",
+    "fields": [
+      "cognitive science",
+      "philosophy",
+      "computer science"
+    ],
+    "question": {
+      "en": "Same world. Different reading?",
+      "zh": "同一个世界，不同的解读？"
+    },
+    "intuition": {
+      "en": "Hold the moving stimulus constant. Change only the observer’s framing, then distinguish a judgment from evidence about perception.",
+      "zh": "保持运动刺激不变，只改变观察者的解读语境，再区分判断与关于知觉的证据。"
+    },
+    "template": "experiment",
+    "simulation": "perception",
+    "steps": [
+      {
+        "title": {
+          "en": "Stimulus",
+          "zh": "刺激"
+        },
+        "detail": {
+          "en": "Dots move along fixed paths.",
+          "zh": "圆点沿固定轨迹移动。"
+        }
+      },
+      {
+        "title": {
+          "en": "Representation",
+          "zh": "表征"
+        },
+        "detail": {
+          "en": "Motion information becomes available to the observer.",
+          "zh": "观察者获得运动信息。"
+        }
+      },
+      {
+        "title": {
+          "en": "Interpretation",
+          "zh": "解释"
+        },
+        "detail": {
+          "en": "A framing suggests playful or threatening motion.",
+          "zh": "不同语境把运动解释为嬉戏或威胁。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Cognitive science",
+          "zh": "认知科学"
+        },
+        "example": {
+          "en": "The same motion can invite different judgments.",
+          "zh": "同一段运动可能引出不同判断。"
+        },
+        "mapping": {
+          "en": "Distinguish available information from the interpretation placed on it.",
+          "zh": "区分可用信息与赋予它的解释。"
+        },
+        "boundary": {
+          "en": "A changed report alone does not establish that early perception changed.",
+          "zh": "仅凭报告改变，不能断定早期知觉发生改变。"
+        }
+      },
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A register holds bits; an address selects a memory location.",
+          "zh": "寄存器保存比特；地址选中一个内存位置。"
+        },
+        "mapping": {
+          "en": "Separate the stored representation from what it refers to.",
+          "zh": "区分保存的表征与它指向的对象。"
+        },
+        "boundary": {
+          "en": "Computer addresses are exact within a model. Mental representations need not behave like pointers.",
+          "zh": "模型中的计算机地址是精确的；心理表征不一定像指针。"
+        }
+      },
+      {
+        "field": {
+          "en": "Philosophy",
+          "zh": "哲学"
+        },
+        "example": {
+          "en": "Ask what makes a judgment justified.",
+          "zh": "追问一个判断为什么有根据。"
+        },
+        "mapping": {
+          "en": "Use the gap between appearance and claim as a question lens.",
+          "zh": "把现象与判断之间的差距作为提问视角。"
+        },
+        "boundary": {
+          "en": "A philosophical question is not an experimentally validated cognitive mechanism.",
+          "zh": "哲学问题不是经过实验验证的认知机制。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "The paths stay identical, but you describe the dots as threatening. What can you conclude?",
+        "zh": "轨迹完全相同，但你描述圆点有威胁。可以得出什么结论？"
+      },
+      "options": [
+        {
+          "en": "The physical stimulus changed",
+          "zh": "物理刺激改变了"
+        },
+        {
+          "en": "The judgment changed; perceptual change is not established",
+          "zh": "判断改变了；尚不能断定知觉改变"
+        },
+        {
+          "en": "Mood always changes early vision",
+          "zh": "情绪总会改变早期视觉"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "The report changed. To locate a perceptual change, we would need a suitable task and controls. This is an illustrative framing exercise, not a psychological measurement.",
+        "zh": "报告改变了。要定位知觉变化，还需要适当任务与控制。本实验是语境演示，不是心理测量。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "memory",
+    "title": {
+      "en": "Addresses & memory",
+      "zh": "地址与内存"
+    },
+    "pattern": "representation",
+    "fields": [
+      "computer science",
+      "mathematics",
+      "cognitive science"
+    ],
+    "question": {
+      "en": "How does one line of code find a value?",
+      "zh": "一行代码如何找到一个值？"
+    },
+    "intuition": {
+      "en": "An array index is a position, not a byte address. Multiply it by the element size before adding the base address.",
+      "zh": "数组下标是位置，不是字节地址。先乘元素大小，再加基址。"
+    },
+    "template": "memory",
+    "simulation": "memory",
+    "steps": [
+      {
+        "title": {
+          "en": "Base",
+          "zh": "基址"
+        },
+        "detail": {
+          "en": "Start at byte address 4096 (0x1000).",
+          "zh": "从字节地址 4096（0x1000）开始。"
+        }
+      },
+      {
+        "title": {
+          "en": "Offset",
+          "zh": "偏移"
+        },
+        "detail": {
+          "en": "For 4-byte elements, offset = i × 4.",
+          "zh": "4 字节元素的偏移量 = i × 4。"
+        }
+      },
+      {
+        "title": {
+          "en": "Read",
+          "zh": "读取"
+        },
+        "detail": {
+          "en": "Read the selected element at base + offset.",
+          "zh": "从基址 + 偏移量处读取元素。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A register holds bits; an address selects a memory location.",
+          "zh": "寄存器保存比特；地址选中一个内存位置。"
+        },
+        "mapping": {
+          "en": "Separate the stored representation from what it refers to.",
+          "zh": "区分保存的表征与它指向的对象。"
+        },
+        "boundary": {
+          "en": "Computer addresses are exact within a model. Mental representations need not behave like pointers.",
+          "zh": "模型中的计算机地址是精确的；心理表征不一定像指针。"
+        }
+      },
+      {
+        "field": {
+          "en": "Mathematics",
+          "zh": "数学"
+        },
+        "example": {
+          "en": "An affine mapping converts an index into an address.",
+          "zh": "仿射映射把下标转换成地址。"
+        },
+        "mapping": {
+          "en": "Use address = base + stride × index.",
+          "zh": "使用 地址 = 基址 + 步长 × 下标。"
+        },
+        "boundary": {
+          "en": "Real layouts can add padding or indirection; this is a contiguous array.",
+          "zh": "真实布局可能包含填充或间接寻址；这里是连续数组。"
+        }
+      },
+      {
+        "field": {
+          "en": "Cognitive science",
+          "zh": "认知科学"
+        },
+        "example": {
+          "en": "The same motion can invite different judgments.",
+          "zh": "同一段运动可能引出不同判断。"
+        },
+        "mapping": {
+          "en": "Distinguish available information from the interpretation placed on it.",
+          "zh": "区分可用信息与赋予它的解释。"
+        },
+        "boundary": {
+          "en": "A changed report alone does not establish that early perception changed.",
+          "zh": "仅凭报告改变，不能断定早期知觉发生改变。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "With base 0x1000 and 4-byte elements, where is b[3]?",
+        "zh": "基址为 0x1000、元素为 4 字节，b[3] 在哪里？"
+      },
+      "options": [
+        {
+          "en": "0x1003",
+          "zh": "0x1003"
+        },
+        {
+          "en": "0x100C",
+          "zh": "0x100C"
+        },
+        {
+          "en": "0x1010",
+          "zh": "0x1010"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "3 × 4 = 12 bytes, and 4096 + 12 = 4108 = 0x100C. The value stored there is a separate quantity.",
+        "zh": "3 × 4 = 12 字节；4096 + 12 = 4108 = 0x100C。这个位置保存的值是另一回事。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "marr",
+    "title": {
+      "en": "Three levels of explanation",
+      "zh": "解释的三个层次"
+    },
+    "pattern": "levels",
+    "fields": [
+      "cognitive science",
+      "computer science",
+      "biology"
+    ],
+    "question": {
+      "en": "Are we answering what, how, or with what?",
+      "zh": "我们在回答什么、如何，还是靠什么实现？"
+    },
+    "intuition": {
+      "en": "A goal, a procedure and a physical implementation answer different questions about the same system.",
+      "zh": "目标、过程与物理实现回答同一系统的不同问题。"
+    },
+    "template": "pipeline",
+    "simulation": "layers",
+    "steps": [
+      {
+        "title": {
+          "en": "Computational",
+          "zh": "计算层"
+        },
+        "detail": {
+          "en": "What problem is solved, and why is that the appropriate problem?",
+          "zh": "解决什么问题？为什么是这个问题？"
+        }
+      },
+      {
+        "title": {
+          "en": "Algorithmic",
+          "zh": "算法层"
+        },
+        "detail": {
+          "en": "Which representations and procedures produce a solution?",
+          "zh": "什么表征与过程产生解答？"
+        }
+      },
+      {
+        "title": {
+          "en": "Implementation",
+          "zh": "实现层"
+        },
+        "detail": {
+          "en": "What physical system carries out those procedures?",
+          "zh": "由什么物理系统执行这些过程？"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "Sorting: ordered output → merge sort → a processor.",
+          "zh": "排序：有序输出 → 归并排序 → 处理器。"
+        },
+        "mapping": {
+          "en": "Goal, algorithm and hardware are distinct explanations.",
+          "zh": "目标、算法与硬件是不同的解释。"
+        },
+        "boundary": {
+          "en": "One algorithm can run on many physical systems.",
+          "zh": "同一算法可以在多种物理系统上运行。"
+        }
+      },
+      {
+        "field": {
+          "en": "Biology",
+          "zh": "生物学"
+        },
+        "example": {
+          "en": "Navigation can be described as a task, computation, and neural activity.",
+          "zh": "导航可以从任务、计算与神经活动描述。"
+        },
+        "mapping": {
+          "en": "Ask which explanatory question the evidence addresses.",
+          "zh": "追问证据针对的是哪个解释问题。"
+        },
+        "boundary": {
+          "en": "Describing neurons alone does not identify the algorithm.",
+          "zh": "仅描述神经元并不能确定算法。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "“This uses a silicon chip” answers which question?",
+        "zh": "“这里使用硅芯片”回答哪个层次的问题？"
+      },
+      "options": [
+        {
+          "en": "Computational goal",
+          "zh": "计算目标"
+        },
+        {
+          "en": "Algorithmic procedure",
+          "zh": "算法过程"
+        },
+        {
+          "en": "Physical implementation",
+          "zh": "物理实现"
+        }
+      ],
+      "answer": 2,
+      "explanation": {
+        "en": "The chip describes the substrate. It does not specify the goal or algorithm. These are explanatory levels, not three serial processing stages.",
+        "zh": "芯片描述物理载体，不指定目标与算法。这是解释层次，不是三个顺序加工阶段。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "cpu",
+    "title": {
+      "en": "Fetch · decode · execute",
+      "zh": "取指 · 译码 · 执行"
+    },
+    "pattern": "systems",
+    "fields": [
+      "computer science",
+      "linguistics",
+      "cognitive science"
+    ],
+    "question": {
+      "en": "What happens between an instruction and an action?",
+      "zh": "指令与行动之间发生了什么？"
+    },
+    "intuition": {
+      "en": "A toy CPU reads an instruction, determines its operation, then updates its state. Real CPUs may overlap these activities.",
+      "zh": "简化 CPU 读取指令、确定操作、更新状态。真实 CPU 可能重叠执行这些活动。"
+    },
+    "template": "pipeline",
+    "simulation": "pipeline",
+    "steps": [
+      {
+        "title": {
+          "en": "Fetch",
+          "zh": "取指"
+        },
+        "detail": {
+          "en": "Read the instruction identified by the program counter.",
+          "zh": "读取程序计数器所指的指令。"
+        }
+      },
+      {
+        "title": {
+          "en": "Decode",
+          "zh": "译码"
+        },
+        "detail": {
+          "en": "Identify the operation and its operands.",
+          "zh": "识别操作及其操作数。"
+        }
+      },
+      {
+        "title": {
+          "en": "Execute",
+          "zh": "执行"
+        },
+        "detail": {
+          "en": "Perform the operation and update the relevant state.",
+          "zh": "执行操作，更新相关状态。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A register holds bits; an address selects a memory location.",
+          "zh": "寄存器保存比特；地址选中一个内存位置。"
+        },
+        "mapping": {
+          "en": "Separate the stored representation from what it refers to.",
+          "zh": "区分保存的表征与它指向的对象。"
+        },
+        "boundary": {
+          "en": "Computer addresses are exact within a model. Mental representations need not behave like pointers.",
+          "zh": "模型中的计算机地址是精确的；心理表征不一定像指针。"
+        }
+      },
+      {
+        "field": {
+          "en": "Linguistics",
+          "zh": "语言学"
+        },
+        "example": {
+          "en": "A listener receives a sentence, interprets it, and responds.",
+          "zh": "听者接收句子、理解并回应。"
+        },
+        "mapping": {
+          "en": "Both descriptions distinguish input, interpretation and response.",
+          "zh": "两种描述都区分输入、解释与回应。"
+        },
+        "boundary": {
+          "en": "Human language processing is context-sensitive and not a literal CPU instruction cycle.",
+          "zh": "人类语言处理依赖语境，并非字面的 CPU 指令周期。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "Does this step-by-step diagram imply all real CPUs finish one instruction before starting another?",
+        "zh": "逐步图是否表示真实 CPU 都执行完一条指令才开始下一条？"
+      },
+      "options": [
+        {
+          "en": "Yes, always",
+          "zh": "是，永远如此"
+        },
+        {
+          "en": "No; it is a simplified conceptual sequence",
+          "zh": "否；这是简化的概念顺序"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "Pipelining and other mechanisms can overlap work. A teaching diagram must state its abstraction level.",
+        "zh": "流水线等机制可以重叠执行任务。教学图需要说明抽象层次。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "turing",
+    "title": {
+      "en": "Rules change a state",
+      "zh": "规则改变状态"
+    },
+    "pattern": "systems",
+    "fields": [
+      "computer science",
+      "mathematics",
+      "linguistics"
+    ],
+    "question": {
+      "en": "Can a small rule create a larger behavior?",
+      "zh": "一条小规则能产生复杂行为吗？"
+    },
+    "intuition": {
+      "en": "This toy tape machine scans to the right, flips 0 to 1 and 1 to 0, then halts at a blank. Step through the rule rather than guessing the result.",
+      "zh": "这台简化纸带机向右扫描，把 0 翻成 1、1 翻成 0，遇到空白停机。逐步执行规则，而不是猜结果。"
+    },
+    "template": "pipeline",
+    "simulation": "state",
+    "steps": [
+      {
+        "title": {
+          "en": "Read",
+          "zh": "读取"
+        },
+        "detail": {
+          "en": "Observe the symbol under the head.",
+          "zh": "观察读写头下的符号。"
+        }
+      },
+      {
+        "title": {
+          "en": "Write & move",
+          "zh": "写入并移动"
+        },
+        "detail": {
+          "en": "Flip a binary symbol and move right.",
+          "zh": "翻转二进制符号，向右移动。"
+        }
+      },
+      {
+        "title": {
+          "en": "Halt",
+          "zh": "停机"
+        },
+        "detail": {
+          "en": "A blank cell ends this particular program.",
+          "zh": "遇到空白结束这个特定程序。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A register holds bits; an address selects a memory location.",
+          "zh": "寄存器保存比特；地址选中一个内存位置。"
+        },
+        "mapping": {
+          "en": "Separate the stored representation from what it refers to.",
+          "zh": "区分保存的表征与它指向的对象。"
+        },
+        "boundary": {
+          "en": "Computer addresses are exact within a model. Mental representations need not behave like pointers.",
+          "zh": "模型中的计算机地址是精确的；心理表征不一定像指针。"
+        }
+      },
+      {
+        "field": {
+          "en": "Mathematics",
+          "zh": "数学"
+        },
+        "example": {
+          "en": "A transition function maps current state and input to a next state.",
+          "zh": "转移函数把当前状态与输入映射到下一状态。"
+        },
+        "mapping": {
+          "en": "Trace repeated applications of a precise rule.",
+          "zh": "追踪精确规则的重复应用。"
+        },
+        "boundary": {
+          "en": "This particular machine is only one small example, not a proof of universality.",
+          "zh": "这只是一个小机器示例，不是通用性的证明。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "After applying the flip rule to every symbol in 1010, what remains?",
+        "zh": "对 1010 的每一位应用翻转规则，得到什么？"
+      },
+      "options": [
+        {
+          "en": "0101",
+          "zh": "0101"
+        },
+        {
+          "en": "1111",
+          "zh": "1111"
+        },
+        {
+          "en": "1010",
+          "zh": "1010"
+        }
+      ],
+      "answer": 0,
+      "explanation": {
+        "en": "Each symbol changes once. The rule and the initial tape jointly determine the result.",
+        "zh": "每个符号改变一次，规则与初始纸带共同决定结果。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "feedback",
+    "title": {
+      "en": "The art of returning to balance",
+      "zh": "回到平衡的机制"
+    },
+    "pattern": "feedback",
+    "fields": [
+      "biology",
+      "engineering",
+      "economics"
+    ],
+    "question": {
+      "en": "Why does a system return—or overshoot?",
+      "zh": "系统为什么回稳，或发生过冲？"
+    },
+    "intuition": {
+      "en": "In this discrete toy controller, the next value equals the current value plus gain × error. Change the gain while the starting state and target stay fixed.",
+      "zh": "离散控制模型：下一值 = 当前值 + 增益 × 误差。保持初始状态和目标不变，只调增益。"
+    },
+    "template": "experiment",
+    "simulation": "feedback",
+    "steps": [
+      {
+        "title": {
+          "en": "Measure",
+          "zh": "测量"
+        },
+        "detail": {
+          "en": "Observe the current state.",
+          "zh": "观察当前状态。"
+        }
+      },
+      {
+        "title": {
+          "en": "Compare",
+          "zh": "比较"
+        },
+        "detail": {
+          "en": "Error = target − current state.",
+          "zh": "误差 = 目标 − 当前状态。"
+        }
+      },
+      {
+        "title": {
+          "en": "Respond",
+          "zh": "响应"
+        },
+        "detail": {
+          "en": "Apply a correction and measure again.",
+          "zh": "施加修正并再次测量。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Biology",
+          "zh": "生物学"
+        },
+        "example": {
+          "en": "Temperature regulation opposes deviations from a target range.",
+          "zh": "体温调节抵抗偏离目标范围的变化。"
+        },
+        "mapping": {
+          "en": "Compare a measured state with a target and respond to the difference.",
+          "zh": "比较测量状态和目标，并对差值作出响应。"
+        },
+        "boundary": {
+          "en": "Organisms involve delays, multiple loops and changing set points; this toy model omits them.",
+          "zh": "生物体包含延迟、多重回路和变化的设定点；简化模型省略了这些。"
+        }
+      },
+      {
+        "field": {
+          "en": "Engineering",
+          "zh": "工程学"
+        },
+        "example": {
+          "en": "A thermostat adjusts heating based on a target temperature.",
+          "zh": "温控器根据目标温度调节加热。"
+        },
+        "mapping": {
+          "en": "The output is measured and used to adjust the next action.",
+          "zh": "测量输出，再用它调整下一步动作。"
+        },
+        "boundary": {
+          "en": "Real controllers include inertia, delays and actuator limits.",
+          "zh": "真实控制器包含惯性、延迟与执行器限制。"
+        }
+      },
+      {
+        "field": {
+          "en": "Economics",
+          "zh": "经济学"
+        },
+        "example": {
+          "en": "An inventory manager orders more when stock falls below a target.",
+          "zh": "库存低于目标时，管理者追加订货。"
+        },
+        "mapping": {
+          "en": "A gap between desired and actual stock guides a response.",
+          "zh": "期望库存与实际库存的差距指导响应。"
+        },
+        "boundary": {
+          "en": "Orders arrive with delays; markets are not guaranteed to converge.",
+          "zh": "订单到货有延迟；市场并不保证收敛。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "For x(next) = x + 1.5 × (target − x), starting below target, what happens first?",
+        "zh": "对于 x(下一步) = x + 1.5 × (目标 − x)，从目标下方开始，第一步会怎样？"
+      },
+      "options": [
+        {
+          "en": "It overshoots the target",
+          "zh": "超过目标"
+        },
+        {
+          "en": "It stays unchanged",
+          "zh": "保持不变"
+        },
+        {
+          "en": "It reaches exactly the target",
+          "zh": "正好到达目标"
+        }
+      ],
+      "answer": 0,
+      "explanation": {
+        "en": "Gain 1.5 corrects 150% of the gap, so the first update overshoots. In this no-delay model the oscillation then decays.",
+        "zh": "增益 1.5 修正了差距的 150%，所以第一步过冲。在这个无延迟模型中，随后振荡衰减。"
+      }
+    },
+    "sources": [
+      {
+        "label": "OpenStax · Homeostasis",
+        "url": "https://openstax.org/books/biology-2e/pages/33-3-homeostasis"
+      }
+    ],
+    "source_facts": []
+  },
+  {
+    "id": "waves",
+    "title": {
+      "en": "Waves, rhythm & repetition",
+      "zh": "波、节奏与重复"
+    },
+    "pattern": "systems",
+    "fields": [
+      "physics",
+      "music",
+      "mathematics"
+    ],
+    "question": {
+      "en": "What changes when a cycle speeds up?",
+      "zh": "循环加速时，什么改变？"
+    },
+    "intuition": {
+      "en": "A sine wave separates amplitude from frequency. Here the horizontal axis is time, so more cycles across the same interval mean higher frequency.",
+      "zh": "正弦波区分振幅和频率。横轴是时间，同一时间内更多循环意味着更高频率。"
+    },
+    "template": "experiment",
+    "simulation": "waves",
+    "steps": [
+      {
+        "title": {
+          "en": "Cycle",
+          "zh": "周期"
+        },
+        "detail": {
+          "en": "One complete repetition takes one period T.",
+          "zh": "完成一次重复需要一个周期 T。"
+        }
+      },
+      {
+        "title": {
+          "en": "Frequency",
+          "zh": "频率"
+        },
+        "detail": {
+          "en": "Frequency f = 1/T counts cycles per second.",
+          "zh": "频率 f = 1/T，表示每秒循环次数。"
+        }
+      },
+      {
+        "title": {
+          "en": "Amplitude",
+          "zh": "振幅"
+        },
+        "detail": {
+          "en": "Amplitude measures displacement from the middle line.",
+          "zh": "振幅是相对中线的最大偏离。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Music",
+          "zh": "音乐"
+        },
+        "example": {
+          "en": "A repeating rhythm has a period; a pure tone has a frequency.",
+          "zh": "重复节奏有周期，纯音有频率。"
+        },
+        "mapping": {
+          "en": "Compare repeating patterns by cycles per unit time.",
+          "zh": "用单位时间内的循环次数比较重复模式。"
+        },
+        "boundary": {
+          "en": "Musical experience also depends on timbre, context and culture; frequency alone is not music.",
+          "zh": "音乐体验还取决于音色、语境与文化；频率本身不是音乐。"
+        }
+      },
+      {
+        "field": {
+          "en": "Physics",
+          "zh": "物理学"
+        },
+        "example": {
+          "en": "An ideal oscillator repeats through time.",
+          "zh": "理想振子随时间重复运动。"
+        },
+        "mapping": {
+          "en": "Period and frequency describe the same repetition at different scales.",
+          "zh": "周期与频率从不同尺度描述同一重复。"
+        },
+        "boundary": {
+          "en": "This plot is displacement versus time, not a spatial wave or an audio recording.",
+          "zh": "本图是位移随时间变化，不是空间波形或录音。"
+        }
+      },
+      {
+        "field": {
+          "en": "Mathematics",
+          "zh": "数学"
+        },
+        "example": {
+          "en": "y = A sin(2πft) specifies a periodic function.",
+          "zh": "y = A sin(2πft) 描述周期函数。"
+        },
+        "mapping": {
+          "en": "Parameters independently control height and temporal repetition.",
+          "zh": "参数分别控制高度与时间重复。"
+        },
+        "boundary": {
+          "en": "Not every periodic pattern is sinusoidal.",
+          "zh": "并非所有周期模式都是正弦波。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "If frequency doubles with amplitude fixed, what happens to the period?",
+        "zh": "振幅不变、频率翻倍，周期如何变化？"
+      },
+      "options": [
+        {
+          "en": "It doubles",
+          "zh": "翻倍"
+        },
+        {
+          "en": "It halves",
+          "zh": "减半"
+        },
+        {
+          "en": "It stays fixed",
+          "zh": "不变"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "T = 1/f. Twice as many cycles fit into one second, so each takes half as long.",
+        "zh": "T = 1/f。一秒内容纳两倍循环，每次循环耗时减半。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "constraints",
+    "title": {
+      "en": "Every choice has a cost",
+      "zh": "每个选择都有代价"
+    },
+    "pattern": "constraints",
+    "fields": [
+      "economics",
+      "computer science",
+      "psychology"
+    ],
+    "question": {
+      "en": "What must you give up to do one more thing?",
+      "zh": "多做一件事，需要放弃什么？"
+    },
+    "intuition": {
+      "en": "A resource constraint links choices. With 60 minutes, choosing 20 more minutes for one task removes 20 minutes available for other tasks.",
+      "zh": "资源约束使选择互相牵连。总共 60 分钟，给一个任务多 20 分钟，其他任务就少了 20 分钟。"
+    },
+    "template": "pipeline",
+    "simulation": "pipeline",
+    "steps": [
+      {
+        "title": {
+          "en": "Budget",
+          "zh": "预算"
+        },
+        "detail": {
+          "en": "Fix the total at 60 minutes.",
+          "zh": "固定总量为 60 分钟。"
+        }
+      },
+      {
+        "title": {
+          "en": "Allocate",
+          "zh": "分配"
+        },
+        "detail": {
+          "en": "Use 40 minutes for reading and 20 for practice.",
+          "zh": "40 分钟阅读，20 分钟练习。"
+        }
+      },
+      {
+        "title": {
+          "en": "Reallocate",
+          "zh": "重新分配"
+        },
+        "detail": {
+          "en": "20 extra minutes of practice leaves 20 for reading.",
+          "zh": "练习增加 20 分钟，阅读剩 20 分钟。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Economics",
+          "zh": "经济学"
+        },
+        "example": {
+          "en": "A limited budget forces choices between uses.",
+          "zh": "有限预算迫使人在不同用途之间选择。"
+        },
+        "mapping": {
+          "en": "Track the resource constraint and what the next choice displaces.",
+          "zh": "追踪资源约束以及新增选择挤占了什么。"
+        },
+        "boundary": {
+          "en": "Preferences and institutions matter; economic value is not a physical storage unit.",
+          "zh": "偏好与制度影响选择；经济价值不是物理存储单位。"
+        }
+      },
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A fixed RAM budget limits the data a program can keep.",
+          "zh": "固定 RAM 预算限制程序可保留的数据。"
+        },
+        "mapping": {
+          "en": "Allocating more to one use leaves less for another.",
+          "zh": "给一种用途分配更多，其他用途剩余更少。"
+        },
+        "boundary": {
+          "en": "Memory bytes are measurable; learning quality is not linear in time.",
+          "zh": "内存字节可测量；学习质量与时间不是线性关系。"
+        }
+      },
+      {
+        "field": {
+          "en": "Psychology",
+          "zh": "心理学"
+        },
+        "example": {
+          "en": "Dividing attention can reduce performance on demanding tasks.",
+          "zh": "分配注意力可能降低高要求任务的表现。"
+        },
+        "mapping": {
+          "en": "Consider interference when tasks compete.",
+          "zh": "任务竞争时要考虑干扰。"
+        },
+        "boundary": {
+          "en": "Attention is not a literal 60-unit tank; task demands and strategies matter.",
+          "zh": "注意力不是 60 单位的容器；任务要求与策略很重要。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "In a fixed 60-minute session, practice increases from 20 to 40 minutes. How much reading time remains?",
+        "zh": "固定 60 分钟，练习从 20 增至 40 分钟。阅读还剩多久？"
+      },
+      "options": [
+        {
+          "en": "40 minutes",
+          "zh": "40 分钟"
+        },
+        {
+          "en": "20 minutes",
+          "zh": "20 分钟"
+        },
+        {
+          "en": "60 minutes",
+          "zh": "60 分钟"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "60 − 40 = 20. The opportunity cost is the value of the best alternative forgone, not merely the number of minutes.",
+        "zh": "60 − 40 = 20。机会成本是放弃的最佳替代方案的价值，不仅是分钟数。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "knowing-doing",
+    "title": {
+      "en": "Knowing through doing",
+      "zh": "在行动中理解"
+    },
+    "pattern": "feedback",
+    "fields": [
+      "philosophy",
+      "education",
+      "computer science"
+    ],
+    "question": {
+      "en": "When does “I know” become meaningful?",
+      "zh": "“我知道”在什么时候才有意义？"
+    },
+    "intuition": {
+      "en": "Use a scenario to examine the relationship between professed knowledge and conduct. This is a philosophical lens, not a claim that moral knowledge is a computer algorithm.",
+      "zh": "通过情境考察口头知识与行为的关系。这是哲学视角，不是在主张道德知识是计算机算法。"
+    },
+    "template": "pipeline",
+    "simulation": "pipeline",
+    "steps": [
+      {
+        "title": {
+          "en": "Claim",
+          "zh": "主张"
+        },
+        "detail": {
+          "en": "I say that honesty matters.",
+          "zh": "我说诚实很重要。"
+        }
+      },
+      {
+        "title": {
+          "en": "Situation",
+          "zh": "情境"
+        },
+        "detail": {
+          "en": "An error benefits me; correcting it has a cost.",
+          "zh": "一个错误让我获利，纠正它需要付出代价。"
+        }
+      },
+      {
+        "title": {
+          "en": "Action & reflection",
+          "zh": "行动与反思"
+        },
+        "detail": {
+          "en": "What does my response reveal about my understanding?",
+          "zh": "我的回应揭示了怎样的理解？"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Philosophy",
+          "zh": "哲学"
+        },
+        "example": {
+          "en": "Wang Yangming connects genuine moral knowing with action.",
+          "zh": "王阳明把真正的道德之知与行动联系起来。"
+        },
+        "mapping": {
+          "en": "Examine the tension between a verbal claim and lived conduct.",
+          "zh": "审视口头主张与实际行为之间的张力。"
+        },
+        "boundary": {
+          "en": "This ethical doctrine is not merely “practice improves skill.”",
+          "zh": "这一伦理学说不只是“练习提高技能”。"
+        }
+      },
+      {
+        "field": {
+          "en": "Education",
+          "zh": "教育学"
+        },
+        "example": {
+          "en": "A learner explains a principle, then uses it in an unfamiliar problem.",
+          "zh": "学习者解释原则，再将其用于陌生问题。"
+        },
+        "mapping": {
+          "en": "Application can expose gaps that fluent explanation hides.",
+          "zh": "应用可以暴露流畅讲解掩盖的理解缺口。"
+        },
+        "boundary": {
+          "en": "Performance depends on context; one mistake does not prove a total lack of understanding.",
+          "zh": "表现依赖情境；一次错误不证明完全不理解。"
+        }
+      },
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A proposed algorithm is tested on concrete inputs.",
+          "zh": "用具体输入测试提出的算法。"
+        },
+        "mapping": {
+          "en": "Putting a claim into operation can expose inconsistencies.",
+          "zh": "把主张付诸操作，可以暴露不一致。"
+        },
+        "boundary": {
+          "en": "Program correctness and moral understanding have different standards.",
+          "zh": "程序正确性与道德理解有不同标准。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "Which is the most careful connection to programming?",
+        "zh": "与编程之间，哪个连接最严谨？"
+      },
+      "options": [
+        {
+          "en": "Moral knowledge is exactly a program",
+          "zh": "道德知识就是程序"
+        },
+        {
+          "en": "Testing and conduct both invite scrutiny of claims, but their standards differ",
+          "zh": "测试与行为都促使我们审视主张，但标准不同"
+        },
+        {
+          "en": "Passing tests proves moral understanding",
+          "zh": "通过测试证明道德理解"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "The useful bridge is a question about claims and enactment. It is not an identity between ethics and software testing.",
+        "zh": "有用的连接是对主张与实践关系的追问，而不是把伦理等同于软件测试。"
+      }
+    },
+    "sources": [
+      {
+        "label": "Stanford Encyclopedia · Wang Yangming",
+        "url": "https://plato.stanford.edu/entries/wang-yangming/"
+      }
+    ],
+    "source_facts": []
+  },
+  {
+    "id": "modularity",
+    "title": {
+      "en": "Parts, interfaces & wholes",
+      "zh": "部分、接口与整体"
+    },
+    "pattern": "levels",
+    "fields": [
+      "computer science",
+      "biology",
+      "cognitive science"
+    ],
+    "question": {
+      "en": "What can a part do independently?",
+      "zh": "一个部分可以独立完成什么？"
+    },
+    "intuition": {
+      "en": "Decompose a system, then inspect the interfaces that connect its parts. A neat diagram alone does not prove that the real system is modular.",
+      "zh": "拆解系统，再检查连接各部分的接口。整齐的图本身并不能证明真实系统具有模块性。"
+    },
+    "template": "pipeline",
+    "simulation": "layers",
+    "steps": [
+      {
+        "title": {
+          "en": "Part",
+          "zh": "部分"
+        },
+        "detail": {
+          "en": "Describe a component and its function.",
+          "zh": "描述部件及其功能。"
+        }
+      },
+      {
+        "title": {
+          "en": "Interface",
+          "zh": "接口"
+        },
+        "detail": {
+          "en": "State which inputs and outputs connect it to other parts.",
+          "zh": "说明它与其他部分连接的输入与输出。"
+        }
+      },
+      {
+        "title": {
+          "en": "Whole",
+          "zh": "整体"
+        },
+        "detail": {
+          "en": "Ask how interactions produce the system-level behavior.",
+          "zh": "追问相互作用如何产生系统层面的行为。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "A parser exposes a contract to the rest of a compiler.",
+          "zh": "解析器向编译器其他部分提供接口契约。"
+        },
+        "mapping": {
+          "en": "Explicit interfaces make dependencies inspectable.",
+          "zh": "明确接口使依赖关系可检查。"
+        },
+        "boundary": {
+          "en": "Software modules are designed; biological boundaries are empirical questions.",
+          "zh": "软件模块是设计的；生物边界则是经验问题。"
+        }
+      },
+      {
+        "field": {
+          "en": "Biology",
+          "zh": "生物学"
+        },
+        "example": {
+          "en": "Organs have specialized roles and extensive interactions.",
+          "zh": "器官具有专门功能，也存在广泛相互作用。"
+        },
+        "mapping": {
+          "en": "Study both local function and interactions.",
+          "zh": "同时研究局部功能与相互作用。"
+        },
+        "boundary": {
+          "en": "Specialization does not mean informational isolation.",
+          "zh": "功能专门化不等于信息隔离。"
+        }
+      },
+      {
+        "field": {
+          "en": "Cognitive science",
+          "zh": "认知科学"
+        },
+        "example": {
+          "en": "The same motion can invite different judgments.",
+          "zh": "同一段运动可能引出不同判断。"
+        },
+        "mapping": {
+          "en": "Distinguish available information from the interpretation placed on it.",
+          "zh": "区分可用信息与赋予它的解释。"
+        },
+        "boundary": {
+          "en": "A changed report alone does not establish that early perception changed.",
+          "zh": "仅凭报告改变，不能断定早期知觉发生改变。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "Does a specialized function prove a component is independent?",
+        "zh": "功能专门化是否证明部件独立？"
+      },
+      "options": [
+        {
+          "en": "Yes",
+          "zh": "是"
+        },
+        {
+          "en": "No; dependencies and interactions still need evidence",
+          "zh": "否；还需要依赖与交互的证据"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "A function can be specialized while its operation depends heavily on other components.",
+        "zh": "功能可以专门化，同时运作高度依赖其他部件。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  },
+  {
+    "id": "static-dynamic",
+    "title": {
+      "en": "A rule is not a running system",
+      "zh": "规则不等于运行中的系统"
+    },
+    "pattern": "systems",
+    "fields": [
+      "computer science",
+      "physics",
+      "mathematics"
+    ],
+    "question": {
+      "en": "What changes when we press play?",
+      "zh": "按下播放后，什么发生变化？"
+    },
+    "intuition": {
+      "en": "A fixed rule describes possible transitions. A trace records the actual states produced from a particular starting point.",
+      "zh": "固定规则描述可能的转移；轨迹记录特定初始状态下实际产生的状态。"
+    },
+    "template": "pipeline",
+    "simulation": "pipeline",
+    "steps": [
+      {
+        "title": {
+          "en": "Rule",
+          "zh": "规则"
+        },
+        "detail": {
+          "en": "Define x(next) = x + 2.",
+          "zh": "定义 x(下一步) = x + 2。"
+        }
+      },
+      {
+        "title": {
+          "en": "Initial state",
+          "zh": "初始状态"
+        },
+        "detail": {
+          "en": "Start at x = 1.",
+          "zh": "从 x = 1 开始。"
+        }
+      },
+      {
+        "title": {
+          "en": "Trace",
+          "zh": "轨迹"
+        },
+        "detail": {
+          "en": "Repeated application gives 1 → 3 → 5 → 7.",
+          "zh": "重复应用得到 1 → 3 → 5 → 7。"
+        }
+      }
+    ],
+    "bridges": [
+      {
+        "field": {
+          "en": "Computer science",
+          "zh": "计算机科学"
+        },
+        "example": {
+          "en": "Source code stays fixed while runtime values change.",
+          "zh": "运行值变化时，源代码可以保持不变。"
+        },
+        "mapping": {
+          "en": "Distinguish the program description from one execution trace.",
+          "zh": "区分程序描述与一次执行轨迹。"
+        },
+        "boundary": {
+          "en": "Static versus dynamic has other technical meanings; this example focuses on description versus execution.",
+          "zh": "静态与动态还有其他技术含义；这里仅讨论描述与执行。"
+        }
+      },
+      {
+        "field": {
+          "en": "Physics",
+          "zh": "物理学"
+        },
+        "example": {
+          "en": "An equation of motion plus initial conditions specifies a trajectory in a model.",
+          "zh": "在模型中，运动方程与初始条件确定一条轨迹。"
+        },
+        "mapping": {
+          "en": "Separate the law from the evolving state.",
+          "zh": "区分规律与演变状态。"
+        },
+        "boundary": {
+          "en": "Real-world measurement error and model limits still matter.",
+          "zh": "真实世界中，测量误差与模型边界仍然重要。"
+        }
+      }
+    ],
+    "challenge": {
+      "question": {
+        "en": "For x(next)=x+2, changing the initial value from 1 to 2 changes what?",
+        "zh": "对于 x(下一步)=x+2，把初值从 1 改成 2，会改变什么？"
+      },
+      "options": [
+        {
+          "en": "The transition rule",
+          "zh": "转移规则"
+        },
+        {
+          "en": "The resulting trace",
+          "zh": "产生的轨迹"
+        }
+      ],
+      "answer": 1,
+      "explanation": {
+        "en": "The rule remains +2; the trace becomes 2 → 4 → 6 → 8.",
+        "zh": "规则仍为 +2；轨迹变成 2 → 4 → 6 → 8。"
+      }
+    },
+    "sources": [],
+    "source_facts": []
+  }
+]

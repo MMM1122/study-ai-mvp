@@ -65,3 +65,22 @@ test('missing backend is explicit and curated labs remain usable',async({page})=
  await expect(page.locator('.lab-alert')).toContainText('Could not load saved labs');
  await expect(page.locator('.concept-card')).toHaveCount(11);
 });
+
+test('saved lessons show provenance and the original library stays accessible',async({page})=>{
+ const {default:catalog}=await import('../lib/lab/catalog.json');
+ const concept={...catalog.find(c=>c.id==='cpu')!,source_facts:[{quote:'A processor fetches an instruction before decoding it.',page:1}]};
+ await page.route('**/labs',route=>route.fulfill({json:[{document_id:42,document_title:'CPU lecture',concepts:[concept],generated_at:'2026-10-04T00:00:00Z',truncated:true}]}));
+ await page.goto('/lab?document=42');
+ await expect(page.locator('.lesson-heading')).toContainText('Fetch · decode · execute');
+ await expect(page.locator('.lesson-heading')).toContainText('FROM YOUR MATERIAL');
+ await page.locator('.lesson-sources summary').click();
+ await expect(page.locator('.lesson-sources')).toContainText('Only the beginning of the document');
+ await expect(page.locator('.lesson-sources blockquote')).toContainText('before decoding it.');
+ await expect(page.locator('.lesson-sources a')).toHaveAttribute('href','/documents/42');
+ await page.getByRole('button',{name:'Curated collection',exact:true}).click();
+ await expect(page.locator('.concept-card')).toHaveCount(11);
+ await page.route('**/dashboard',route=>route.fulfill({json:{subjects:0,documents:0,flashcards:0,due:0,recent_documents:[]}}));
+ await page.route('**/subjects',route=>route.fulfill({json:[]}));
+ await page.getByRole('link',{name:'Library',exact:false}).click();
+ await expect(page.getByRole('heading',{name:'Your subjects'})).toBeVisible();
+});

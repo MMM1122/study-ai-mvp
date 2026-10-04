@@ -50,3 +50,14 @@ jobs:
       - name: Exercise interactive labs
         working-directory: frontend
         run: npm run test:e2e
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+      - name: Install real API for integration test
+        run: pip install -r backend/requirements.txt
+      - name: Exercise upload-to-study flow against real API
+        working-directory: frontend
+        run: npm run test:integration

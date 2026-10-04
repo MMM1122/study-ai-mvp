@@ -86,3 +86,23 @@ test('saved lessons show provenance and the original library stays accessible',a
  await page.getByRole('link',{name:'Library',exact:false}).click();
  await expect(page.getByRole('heading',{name:'Your subjects'})).toBeVisible();
 });
+
+test('connection map selects concepts and filters do not show unrelated lessons',async({page})=>{
+ await page.goto('/');
+ await page.getByRole('button',{name:'Connection map',exact:true}).click();
+ await expect(page.locator('.map-node')).toHaveCount(11);
+ await page.locator('.map-node').filter({hasText:'Waves, rhythm'}).click();
+ await expect(page.locator('.lesson-heading')).toContainText('Waves, rhythm & repetition');
+ await page.getByRole('searchbox').fill('memory');
+ await expect(page.locator('.map-node')).toHaveCount(1);
+ await expect(page.locator('.lesson-heading')).toContainText('Addresses & memory');
+ await page.getByRole('searchbox').fill('nonexistent');
+ await expect(page.locator('.lesson-heading')).toHaveCount(0);
+ await expect(page.locator('.lab-empty')).toContainText('No matching concepts');
+ await page.getByRole('button',{name:'Clear filters'}).click();
+ await page.setViewportSize({width:390,height:844});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ await expect(page.locator('h1')).toHaveCount(1);
+ await expect(page.locator('.knowledge-map')).toBeVisible();
+ await page.locator('.knowledge-map').screenshot({path:'test-results/concept-map-mobile.png'});
+});

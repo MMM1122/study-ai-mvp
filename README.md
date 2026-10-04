@@ -178,7 +178,7 @@ remain available through their existing routes.
 - Understand / Play / Challenge modes, cross-domain examples and explicit analogy limits.
 - Deterministic memory addressing, binary tape transitions, feedback response and
   frequency experiments, plus pipeline and explanation-level walkthroughs.
-- Search, discipline/pattern filters, English/Chinese interface and browser-local progress.
+- Search, discipline/pattern filters, a clickable connection map, English/Chinese interface and browser-local progress.
 - A document page can generate 1–4 grounded lessons through the OpenRouter backend.
   `POST /documents/{id}/lab` creates or returns a saved lesson; `GET` reads it;
   `GET /labs` lists saved lessons. Existing notes and review cards are not modified.
@@ -234,3 +234,21 @@ Never put the key in a `NEXT_PUBLIC_` variable or commit `.env`.
 The free endpoint's published data policy says prompts may be logged and used to
 improve NVIDIA products. Do not submit confidential or personal data through it.
 See [model details and endpoint terms](https://openrouter.ai/nvidia/nemotron-3-ultra-550b-a55b:free).
+
+### Real backend browser integration
+
+After installing backend dependencies and building the frontend, run:
+
+```bash
+cd frontend
+npm run test:integration
+```
+
+This starts a disposable FastAPI server on port 8000 and a frontend on port 3100.
+The `python` executable must have the backend dependencies installed. The frontend must be built with its default `http://localhost:8000` API address.
+The test refuses to reuse an existing server at either port and never connects to
+an already-running user backend. The browser directly creates a subject/folder, uploads the cross-disciplinary sample, generates demo notes,
+checks persistence after refresh and verifies the missing-key message for Concept Lab.
+The server uses a temporary database/upload folder and an explicitly empty API key.
+It never accesses your database or calls a model. Real AI generation still requires
+a user-supplied OpenRouter key.

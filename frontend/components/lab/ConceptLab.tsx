@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {useI18n} from '@/components/I18n';
 import Simulator from './Simulators';
+import KnowledgeMap from './KnowledgeMap';
 import catalog from '@/lib/lab/catalog.json';
 import type {Lesson, Bi, LabDocument} from '@/lib/lab/types';
 import {API} from '@/lib/api';
@@ -36,6 +37,7 @@ function LessonView({lesson,progress,update,document}:{lesson:Lesson;progress:Pr
 export default function ConceptLab(){
   const {lang}=useI18n();const t=(en:string,zh:string)=>lang==='zh'?zh:en;const b=(v:Bi)=>v[lang];
   const params=useSearchParams();
+  const [view,setView]=useState<'cards'|'map'>('cards');
   const [pattern,setPattern]=useState('all'),[search,setSearch]=useState(''),[field,setField]=useState('all');
   const [selected,setSelected]=useState('representation'),[progress,setProgress]=useState<Progress>({}),[ready,setReady]=useState(false);
   const [saved,setSaved]=useState<LabDocument[]>([]),[source,setSource]=useState('curated'),[loadError,setLoadError]=useState(''),[loading,setLoading]=useState(false);
@@ -45,9 +47,9 @@ export default function ConceptLab(){
   useEffect(()=>{if(params.get('document'))void loadSaved()},[params]); // eslint-disable-line react-hooks/exhaustive-deps
   const doc=saved.find(d=>String(d.document_id)===source);
   const lessons:Lesson[]=source==='curated'?curated:(doc?.concepts||[]).map(c=>({...c,id:`doc-${doc!.document_id}-${c.id}`}));
-  const lesson=lessons.find(c=>c.id===selected)||lessons[0];
   const fields=Array.from(new Set(lessons.flatMap(c=>c.fields))).sort();
   const visible=lessons.filter(c=>(pattern==='all'||c.pattern===pattern)&&(field==='all'||c.fields.includes(field))&&`${c.title.en} ${c.title.zh} ${c.fields.join(' ')} ${c.question.en} ${c.question.zh}`.toLowerCase().includes(search.toLowerCase()));
+  const lesson=visible.find(c=>c.id===selected)||visible[0];
   const solved=lessons.filter(c=>progress[c.id]?.solved).length;
   function update(kind:'explored'|'solved'){if(lesson)setProgress(p=>p[lesson.id]?.[kind]?p:({...p,[lesson.id]:{...p[lesson.id],[kind]:true}}))}
   return <div className="concept-lab">
@@ -57,10 +59,12 @@ export default function ConceptLab(){
     <div className="lab-filters"><div className="pattern-tabs" aria-label={t('Concept patterns','概念模式')}>{patterns.map(([key,en,zh,icon])=><button key={key} aria-pressed={pattern===key} className={pattern===key?'selected':''} onClick={()=>setPattern(key)}><span>{icon}</span>{t(en,zh)}</button>)}</div><div className="search-row"><label className="search-box"><span>⌕</span><input type="search" value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('Find an idea…','寻找一个想法…')} aria-label={t('Search concepts','搜索概念')}/></label><select aria-label={t('Filter by discipline','按学科筛选')} value={field} onChange={e=>setField(e.target.value)}><option value="all">{t('All disciplines','全部学科')}</option>{fields.map(f=><option key={f}>{f}</option>)}</select><button className="lab-btn" disabled={loading} onClick={loadSaved}>{loading?t('Loading…','加载中…'):t('My generated labs ↗','我的生成实验课 ↗')}</button></div></div>
     {(saved.length>0||source!=='curated')&&<div className="saved-labs"><button className={source==='curated'?'selected':''} onClick={()=>{setSource('curated');setPattern('all');setField('all');setSearch('')}}>{t('Curated collection','精选课程')}</button>{saved.map(d=><button key={d.document_id} className={source===String(d.document_id)?'selected':''} onClick={()=>{setSource(String(d.document_id));setPattern('all');setField('all');setSearch('')}}>{d.document_title}</button>)}</div>}
     {loadError&&<div className="lab-alert" role="alert">{loadError}</div>}
-    <div className="concept-strip">{visible.map((c,i)=><button key={c.id} aria-pressed={lesson?.id===c.id} className={`concept-card ${lesson?.id===c.id?'selected':''}`} onClick={()=>setSelected(c.id)}><div className="concept-card-top"><span>{symbols[c.pattern]}</span><small>{progress[c.id]?.solved?'✓':String(i+1).padStart(2,'0')}</small></div><h3>{b(c.title)}</h3><div><span>{c.fields.slice(0,2).map(f=>f.replace('computer science','computing').replace('cognitive science','cognition')).join(' ↔ ')}</span><b>↗</b></div></button>)}</div>
+    <div className="collection-toolbar"><span>{visible.length} {t('concepts to explore','个概念可探索')}</span><div className="view-switch" aria-label={t('Collection view','概念浏览方式')}><button aria-pressed={view==='cards'} onClick={()=>setView('cards')}>{t('Cards','卡片')}</button><button aria-pressed={view==='map'} onClick={()=>setView('map')}>{t('Connection map','连接地图')}</button></div></div>
+    {view==='map'&&visible.length>0&&<KnowledgeMap lessons={visible} selected={lesson?.id} onSelect={setSelected}/>}
+    <div className="concept-strip" hidden={view==='map'}>{visible.map((c,i)=><button key={c.id} aria-pressed={lesson?.id===c.id} className={`concept-card ${lesson?.id===c.id?'selected':''}`} onClick={()=>setSelected(c.id)}><div className="concept-card-top"><span>{symbols[c.pattern]}</span><small>{progress[c.id]?.solved?'✓':String(i+1).padStart(2,'0')}</small></div><h3>{b(c.title)}</h3><div><span>{c.fields.slice(0,2).map(f=>f.replace('computer science','computing').replace('cognitive science','cognition')).join(' ↔ ')}</span><b>↗</b></div></button>)}</div>
     {!visible.length&&<div className="lab-empty">{t('No matching concepts. Try another pattern or search.','没有匹配的概念，请更换模式或搜索词。')}<button className="lab-btn" onClick={()=>{setPattern('all');setSearch('');setField('all')}}>{t('Clear filters','清除筛选')}</button></div>}
     {lesson&&<LessonView key={lesson.id} lesson={lesson} progress={progress} update={update} document={doc}/>}
-    {!lesson&&!loading&&!loadError&&<div className="lab-empty">{t('No saved lesson for this document. Generate one from its document page.','此资料暂无实验课，请到资料页面生成。')}<Link href="/library">{t('Open library →','打开资料库 →')}</Link></div>}
+    {!lessons.length&&!loading&&!loadError&&<div className="lab-empty">{t('No saved lesson for this document. Generate one from its document page.','此资料暂无实验课，请到资料页面生成。')}<Link href="/library">{t('Open library →','打开资料库 →')}</Link></div>}
     <footer className="lab-footer"><span>✳ STUDYAI</span><p>{t('Understanding grows at the edges of what you know.','理解，生长在已知与未知的交界处。')}</p><small>{t('Progress saved on this browser','进度保存在当前浏览器')}</small></footer>
   </div>;
 }

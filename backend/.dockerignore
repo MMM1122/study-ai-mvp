@@ -1,6 +1,11 @@
 .venv
 __pycache__
+**/__pycache__
 *.pyc
 .env
+.env.*
+!.env.example
+*.db
 data
-studyai.db
+.pytest_cache
+.git

@@ -1,4 +1,6 @@
 import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import type {Lesson} from '../lib/lab/types';
 
 test('explore memory, predict, and retain progress after refresh',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
@@ -67,7 +69,7 @@ test('missing backend is explicit and curated labs remain usable',async({page})=
 });
 
 test('saved lessons show provenance and the original library stays accessible',async({page})=>{
- const {default:catalog}=await import('../lib/lab/catalog.json');
+ const catalog:Lesson[]=JSON.parse(readFileSync('lib/lab/catalog.json','utf8'));
  const concept={...catalog.find(c=>c.id==='cpu')!,source_facts:[{quote:'A processor fetches an instruction before decoding it.',page:1}]};
  await page.route('**/labs',route=>route.fulfill({json:[{document_id:42,document_title:'CPU lecture',concepts:[concept],generated_at:'2026-10-04T00:00:00Z',truncated:true}]}));
  await page.goto('/lab?document=42');

@@ -13,3 +13,10 @@ frontend/node_modules/
 frontend/.next/
 # macOS
 .DS_Store
+
+*.tsbuildinfo
+smoke_studyai.db
+smoke_uploads/
+.pytest_cache/
+frontend/test-results/
+frontend/playwright-report/

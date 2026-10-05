@@ -322,35 +322,26 @@ SCHEMA_HINT = {
         }
     ]
 }
-def _clean_json(text: str) -> dict[str, Any]:
-    text = text.strip()
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.I | re.S)
-    start, end = text.find("{"), text.rfind("}")
-    if start >= 0 and end > start:
-        text = text[start:end + 1]
-    return json.loads(text)
-
-
 def _fallback_notes(title: str, text: str) -> dict[str, Any]:
     clean = re.sub(r"\s+", " ", text).strip()
     excerpt = clean[:1800] or "No extractable text was found."
     return {
         "title": title,
         "summary": {
-            "en": "AI generation is in demo mode because OPENAI_API_KEY is not configured. Here is an excerpt from the uploaded material: " + excerpt[:900],
-            "zh": "目前是演示模式，因为还没有配置 OPENAI_API_KEY。以下是上传资料的原文摘录：" + excerpt[:900],
+            "en": "AI generation is in demo mode because OPENROUTER_API_KEY is not configured. Here is an excerpt from the uploaded material: " + excerpt[:900],
+            "zh": "目前是演示模式，因为还没有配置 OPENROUTER_API_KEY。以下是上传资料的原文摘录：" + excerpt[:900],
         },
-        "key_points": [{"concept": "Demo mode", "explanation_en": "Add an OpenAI API key to generate structured study notes.", "explanation_zh": "添加 OpenAI API Key 后即可生成完整结构化学习笔记。", "importance": "high", "source_page": None}],
+        "key_points": [{"concept": "Demo mode", "explanation_en": "Add an OpenRouter API key to generate structured study notes.", "explanation_zh": "添加 OpenRouter API Key 后即可生成完整结构化学习笔记。", "importance": "high", "source_page": None}],
         "five_whys": [],
         "cornell": {"rows": [], "summary_en": "Configure the API key to generate Cornell notes.", "summary_zh": "配置 API Key 后生成康奈尔笔记。"},
         "examples": [],
         "common_mistakes": [],
-        "flashcards": [{"front": "What is required to enable AI note generation?", "back": "Set OPENAI_API_KEY in backend/.env.", "card_type": "definition", "source_page": None}],
+        "flashcards": [{"front": "What is required to enable AI note generation?", "back": "Set OPENROUTER_API_KEY in backend/.env.", "card_type": "definition", "source_page": None}],
     }
 
 
 def generate_study_notes(title: str, text: str, bilingual: bool = True) -> dict[str, Any]:
-    if not settings.openai_api_key:
+    if not settings.openrouter_api_key:
         return _fallback_notes(title, text)
 
     material = text[: settings.max_ai_chars]
@@ -362,23 +353,7 @@ Target output shape (use null when source_page is unknown):
 COURSE MATERIAL:
 {material}
 """
-    from openai import OpenAI
-    client = OpenAI(api_key=settings.openai_api_key)
-    response = client.responses.create(
-        model=settings.openai_model,
-        instructions=SYSTEM_PROMPT,
-        input=user_prompt,
-    )
-    try:
-        return _clean_json(response.output_text)
-    except Exception:
-        repair = client.responses.create(
-            model=settings.openai_model,
-            input=(
-                "Repair the following into valid JSON matching this shape. Return JSON only.\n"
-                + json.dumps(SCHEMA_HINT, ensure_ascii=False)
-                + "\n\nBROKEN OUTPUT:\n"
-                + response.output_text
-            ),
-        )
-        return _clean_json(repair.output_text)
+    from .llm import generate_json
+    from .note_schema import StudyNotes
+    return generate_json(SYSTEM_PROMPT, user_prompt,
+                         lambda data: StudyNotes.model_validate(data).model_dump())

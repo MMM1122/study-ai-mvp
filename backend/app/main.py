@@ -14,12 +14,15 @@ from .models import Subject, Folder, Document, StudyNote, Flashcard, ReviewLog
 from .schemas import SubjectCreate, SubjectOut, SubjectDetail, FolderCreate, FolderOut, DocumentOut, DocumentDetail, NoteOut, FlashcardOut, ReviewRequest, GenerateRequest
 from .extract import extract_document, SUPPORTED
 from .ai import generate_study_notes
+from .llm import GenerationError
 from .review import schedule
+from .lab_routes import router as lab_router
 
 settings = get_settings()
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title=settings.app_name, version="0.1.0")
+app = FastAPI(title=settings.app_name, version="0.2.0")
+app.include_router(lab_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.origins,
@@ -31,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "ai_enabled": bool(settings.openai_api_key), "model": settings.openai_model}
+    return {"status": "ok", "ai_enabled": bool(settings.openrouter_api_key), "provider": "openrouter", "model": settings.openrouter_model}
 
 
 @app.get("/dashboard")
@@ -146,8 +149,11 @@ def generate_document_notes(document_id: int, payload: GenerateRequest, db: Sess
         db.commit(); db.refresh(note)
         return note
     except Exception as exc:
+        db.rollback()
         doc.status = "error"; db.commit()
-        raise HTTPException(500, f"AI generation failed: {exc}")
+        if isinstance(exc, GenerationError):
+            raise HTTPException(exc.status_code, str(exc)) from None
+        raise HTTPException(502, "AI generation failed. Please retry.") from None
 
 
 @app.get("/documents/{document_id}/note", response_model=NoteOut)

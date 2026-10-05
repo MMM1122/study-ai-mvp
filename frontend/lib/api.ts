@@ -6,7 +6,8 @@ export type DocumentItem = { id:number; subject_id:number; folder_id?:number|nul
 export type Flashcard = { id:number; document_id:number; front:string; back:string; card_type:string; source_page?:number|null; due_at:string; interval_days:number; ease_factor:number; repetitions:number; last_reviewed_at?:string|null };
 
 async function request<T>(path:string, init?:RequestInit): Promise<T> {
-  const res = await fetch(`${API}${path}`, { ...init, headers: { ...(init?.body instanceof FormData ? {} : {"Content-Type":"application/json"}), ...(init?.headers || {}) } });
+  let res:Response;
+  try { res = await fetch(`${API}${path}`, { ...init, headers: { ...(init?.body instanceof FormData ? {} : {"Content-Type":"application/json"}), ...(init?.headers || {}) } }); } catch { throw new Error("The study service could not be reached. Check your connection and try again."); }
   if (!res.ok) { const detail = await res.json().catch(()=>({detail:res.statusText})); throw new Error(detail.detail || "Request failed"); }
   return res.json();
 }

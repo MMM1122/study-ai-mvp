@@ -9,22 +9,48 @@ The easiest production split is:
 
 The MVP can still run with local/persistent disk storage while you are the only user.
 
-## 1. Upload the repository to GitHub
+## 1. Select the Concept Lab version
 
-Create a new empty GitHub repository and upload/push this project. After the first push, `.github/workflows/ci.yml` automatically runs backend and frontend checks.
+The implementation is in `feat/interactive-concept-lab` in
+[MMM1122/study-ai-mvp](https://github.com/MMM1122/study-ai-mvp).
+Use that branch for a preview deployment, or merge [PR #1](https://github.com/MMM1122/study-ai-mvp/pull/1)
+before deploying the default branch. Do not initialize another Git repository.
 
-Typical terminal flow:
+`.github/workflows/ci.yml` runs backend and frontend checks on pushes and pull requests.
+Do **not** commit `.env` files or your API key.
+
+### Try locally first (no API key needed)
+
+To explore the curated Concept Lab without the backend:
 
 ```bash
-git init
-git add .
-git commit -m "Initial StudyAI MVP"
-git branch -M main
-git remote add origin YOUR_GITHUB_REPOSITORY_URL
-git push -u origin main
+cd frontend
+npm ci
+npm run dev
 ```
 
-Do **not** commit `.env` files or your API key.
+Open `http://localhost:3000`. Curated experiments and browser-local progress work;
+Library uploads and generated lessons require the backend.
+
+For the full application, start Docker Desktop, then run from the repository root:
+
+```bash
+# Only when .env does not exist; preserve any key already configured.
+test -f .env || cp .env.example .env
+docker compose up --build
+```
+
+The `OPENROUTER_API_KEY=` line can remain blank while you explore curated lessons.
+To enable real AI, fill it in the root `.env` and recreate the backend:
+
+```bash
+docker compose up -d --force-recreate backend
+```
+
+For a non-Docker backend, put the key in `backend/.env` and restart uvicorn instead.
+The model is already set to `nvidia/nemotron-3-ultra-550b-a55b:free`.
+A configured key is not proof that the provider is reachable; the first successful
+generation is the live end-to-end check.
 
 ## 2. Create PostgreSQL
 
@@ -44,8 +70,8 @@ Required environment variables:
 
 ```env
 DATABASE_URL=postgresql+psycopg://...
-OPENAI_API_KEY=...
-OPENAI_MODEL=gpt-5.6-luna
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
 CORS_ORIGINS=https://YOUR-FRONTEND-DOMAIN.vercel.app
 UPLOAD_DIR=/app/data/uploads
 ```
@@ -98,14 +124,23 @@ Redeploy the backend if you changed it.
 
 From the public site:
 
-1. Create `CPSC 213`.
+1. Open Library and create a subject such as `Cross-disciplinary systems`.
 2. Create a `Lectures` folder.
-3. Upload `samples/cpsc213_cache_sample.md` or one of your own PDFs.
+3. Upload `samples/cross_discipline_lab_sample.md`, `samples/cpsc213_cache_sample.md`, or a course PDF.
 4. Generate AI notes.
 5. Switch UI language between English and Chinese.
 6. Switch note language between bilingual, English, and Chinese.
 7. Open Review and rate a flashcard.
-8. Refresh the site and confirm your data remains in PostgreSQL.
+8. Select **Open / generate Concept Lab** on the document page.
+9. Inspect the source quotes, cross-domain mappings and analogy boundaries. Complete a challenge.
+10. Refresh and reopen the saved lab; verify notes and flashcards are still present.
+11. In `/health`, confirm `provider` is `openrouter`, `model` ends in `:free`, and
+    `ai_enabled` is true after a key is configured. No key is returned by this endpoint.
+
+If a free-model request returns 429, wait before retrying. A 503 can mean an absent
+key, invalid credentials or temporary provider unavailability; the message identifies
+the case. The application does not switch to a paid model. A failed format/source
+validation returns 502 and does not save a partial lesson.
 
 ## Before inviting other users
 

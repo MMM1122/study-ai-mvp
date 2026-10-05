@@ -4,8 +4,10 @@ from pathlib import Path
 
 root=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(root/'backend'))
-os.environ['DATABASE_URL']='sqlite:///./smoke_studyai.db'
-os.environ['UPLOAD_DIR']='./smoke_uploads'
+_tmp = tempfile.TemporaryDirectory()
+os.environ['DATABASE_URL']=f'sqlite:///{_tmp.name}/smoke.db'
+os.environ['UPLOAD_DIR']=f'{_tmp.name}/uploads'
+os.environ['OPENROUTER_API_KEY']=''
 
 from fastapi.testclient import TestClient
 from app.main import app

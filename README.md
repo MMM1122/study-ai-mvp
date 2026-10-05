@@ -20,7 +20,7 @@ A bilingual AI study workspace for course materials. Organize subjects and folde
 - Review queue with Again / Hard / Good / Easy scheduling
 - Responsive Next.js interface
 - PostgreSQL in Docker; SQLite fallback for backend-only local testing
-- Demo mode when no OpenAI API key is configured
+- Demo mode when no OpenRouter API key is configured
 
 ## Architecture
 
@@ -30,7 +30,7 @@ Next.js 16 / React 19
         v
 FastAPI / SQLAlchemy
         |
-        +---- OpenAI Responses API
+        +---- OpenRouter Chat Completions
         |
         +---- PostgreSQL
         |
@@ -166,3 +166,89 @@ python scripts/smoke_test.py
 ```
 
 The repository was also checked for Python syntax and frontend TSX syntax. A full Next.js dependency build still requires `npm install` on a networked development machine.
+
+## Concept Lab (v0.2)
+
+The home page is now an interactive, bilingual Concept Lab. The original workspace is
+available under **Library** (`/library`); subjects, documents, notes and spaced review
+remain available through their existing routes.
+
+- 11 curated concept worlds across multiple disciplines, organized by representation,
+  systems, feedback, constraints and levels.
+- Understand / Play / Challenge modes, cross-domain examples and explicit analogy limits.
+- Deterministic memory addressing, binary tape transitions, feedback response and
+  frequency experiments, plus pipeline and explanation-level walkthroughs.
+- Search, discipline/pattern filters, a clickable connection map, English/Chinese interface and browser-local progress.
+- A document page can generate 1–4 grounded lessons through the OpenRouter backend.
+  `POST /documents/{id}/lab` creates or returns a saved lesson; `GET` reads it;
+  `GET /labs` lists saved lessons. Existing notes and review cards are not modified.
+
+Curated lessons work without the backend or an API key. Document generation requires
+`OPENROUTER_API_KEY`. The default model is
+`nvidia/nemotron-3-ultra-550b-a55b:free` on OpenRouter. Missing credentials return an explicit 503, not a
+fabricated lesson. Generated lessons use the general pipeline renderer; specialized
+numerical simulations are curated only. The model does not support enforced JSON Schema, so output is validated locally
+with a bounded Pydantic schema and at most one repair using the same model and source quotes/pages are checked against the supplied text.
+Quote matching does **not** verify explanatory accuracy or analogy quality.
+
+New table `concept_labs` is created on backend startup using the project's existing
+SQLAlchemy setup. Existing tables need no destructive migration. This remains a
+single-user MVP with the original authentication limitations; do not expose a paid
+AI endpoint as an unrestricted public service.
+
+### Verification
+
+```bash
+pip install -r backend/requirements-dev.txt
+pytest -q backend/tests
+python scripts/smoke_test.py
+cd frontend
+npm ci
+npm run lint
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+For a local installed browser, set `PLAYWRIGHT_EXECUTABLE_PATH`. End-to-end tests start
+an isolated production server on port 3100. On hosts where Turbopack cannot open its
+internal build port, use `npm run build -- --webpack`.
+
+See [Concept Lab architecture](docs/concept-lab.md) for the extension contract.
+
+### OpenRouter configuration
+
+Set these in `backend/.env` for local development, or root `.env` for Docker:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key
+OPENROUTER_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
+```
+
+Both study notes and Concept Lab use `https://openrouter.ai/api/v1/chat/completions`.
+The OpenAI Python SDK is used only as an OpenRouter-compatible HTTP client. Old
+`OPENAI_API_KEY` settings are not used. There is no paid-model fallback. Free endpoints
+can be rate-limited or unavailable; the app displays an explicit retry message.
+Never put the key in a `NEXT_PUBLIC_` variable or commit `.env`.
+
+The free endpoint's published data policy says prompts may be logged and used to
+improve NVIDIA products. Do not submit confidential or personal data through it.
+See [model details and endpoint terms](https://openrouter.ai/nvidia/nemotron-3-ultra-550b-a55b:free).
+
+### Real backend browser integration
+
+After installing backend dependencies and building the frontend, run:
+
+```bash
+cd frontend
+npm run test:integration
+```
+
+This starts a disposable FastAPI server on port 8000 and a frontend on port 3100.
+The `python` executable must have the backend dependencies installed. The frontend must be built with its default `http://localhost:8000` API address.
+The test refuses to reuse an existing server at either port and never connects to
+an already-running user backend. The browser directly creates a subject/folder, uploads the cross-disciplinary sample, generates demo notes,
+checks persistence after refresh and verifies the missing-key message for Concept Lab.
+The server uses a temporary database/upload folder and an explicitly empty API key.
+It never accesses your database or calls a model. Real AI generation still requires
+a user-supplied OpenRouter key.

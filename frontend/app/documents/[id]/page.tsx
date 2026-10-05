@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import LanguageToggle,{Lang} from "@/components/LanguageToggle";
 import { api, Flashcard } from "@/lib/api";
+import GenerateLab from "@/components/lab/GenerateLab";
 import { useI18n } from "@/components/I18n";
 
 function Bi({obj,en,zh,lang}:{obj:any,en:string,zh:string,lang:Lang}){return <>{(lang==='both'||lang==='en')&&obj?.[en]&&<p>{obj[en]}</p>}{(lang==='both'||lang==='zh')&&obj?.[zh]&&<p className="zh">{obj[zh]}</p>}</>}
@@ -18,6 +19,7 @@ export default function DocumentPage(){
   return <div>
     <header className="top stickyTop"><div><button className="linkBtn" onClick={()=>history.back()}>← {t("Back")}</button><h1>{doc.title}</h1><p className="muted">{doc.filename}{doc.page_count?` · ${doc.page_count} pages`:''}</p></div><div className="actions"><LanguageToggle value={lang} onChange={setLang}/><button className="primary" onClick={generate} disabled={busy}>{busy?t("AI is organizing…"):note?t("Regenerate notes"):t("Generate AI notes")}</button></div></header>
     {error&&<div className="error">{error}</div>}
+    <GenerateLab documentId={id}/>
     {!note?<div className="heroEmpty"><div className="spark">✦</div><h2>{t("Ready to turn this file into study notes")}</h2><p>{t("StudyAI will create a bilingual summary, key points, 5 Why explanations, Cornell notes, examples, common mistakes and flashcards.")}</p><button className="primary big" onClick={generate} disabled={busy}>{busy?t("Generating…"):t("Generate study notes")}</button></div>:
     <div className="notes">
       <section className="noteSection"><div className="sectionLabel">01 · SUMMARY</div><h2>{note.title||doc.title}</h2><Bi obj={note.summary} en="en" zh="zh" lang={lang}/></section>
